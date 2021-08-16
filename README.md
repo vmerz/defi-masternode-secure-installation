@@ -1,72 +1,84 @@
-<h1 align="centre">
+<h1 align="center">
     <br>
         defi-masternode-secure-installation
     <br>
 </h1>
 
-<h4 align="centre">
-    Instructions & script for the secure installation of a DefiChain masternode.
-    Wishes and suggestions for improvement are welcome.
+<div align="center">
+    
+[:gb::us: Translation](https://github.com/vmerz/defi-masternode-secure-installation/README.EN.md) 
+
+</div>
+
+<h4 align="center">
+    Anleitung & Skript zur sicheren Installation einer DefiChain Masternode.
+    Wünsche und Verbesserungsvorschläge sind willkommen.
 </h4>
 
-<p align="centre">
-  <a href="#OperatingSystemRecommendation">Operating System Recommendation</a> -.
-  <a href="#Installation compact">Installation compact</a> -
-  <a href="#Installation detailed">Installation detailed</a> -
-  <a href="#Installation script">Installation script</a> -
-  <a href="#Support">Support</a> -
-  <a href="#license">license</a>
+<p align="center">
+  <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
+  <a href="#Installation kompakt">Installation kompakt</a> •
+  <a href="#Installation ausführlich">Installation ausführlich</a> •
+  <a href="#Installationsskript">Installationsskript</a> •
+  <a href="#Support">Support</a> •
+  <a href="#license">License</a>
 </p>
+
+<div align="center">
+    
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+    
+</div>
 
 <br>
 
-## Protect your masternode!
+## Schützt eure Masternode!
 
-Most installation guides for masternodes only mention the topic of security in passing.
-You are about to put a server openly on the internet and also transfer some coins to its wallet. So we should definitely deal with the topic of server security.
+Die meisten Installationsanleitungen für Masternodes erwähnen das Thema Sicherheit nur am Rande.
+Ihr seid im Begriff, einen Server offen ins Internet zu stellen und auch noch einiges an Coins auf dessen Wallet zu übertragen. Wir sollten uns also unbedingt mit dem Thema Serversicherheit auseinandersetzen.
 
-## Operating system recommendation
+## Betriebssystemempfehlung
 
 Debian buster
 
-## Installation compact
+## Installation kompakt
 
-Short and sweet everything about the manual installation
+Kurz und knapp alles zur manuellen Installation
 
-``bash
-# change to root if you are not already root
+```bash
+# Wechseln zu root, wenn ihr nicht schon root seid
 su -
-# install the required packages
+# Installation der benötigten Packages
 apt -y update && apt -y upgrade
 apt -y install ufw nano htop fail2ban psmisc
 
-# We dice ourselves a new SSH port
+# Wir würfeln uns einen neuen SSH-Port
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
 
-# Change SSH port
+# SSH-Port ändern
 nano -w /etc/ssh/sshd_config
 
-# Allow required ports in the firewall
+# Benötigte Ports in der Firewall freigeben
 ufw allow 50695/tcp
 ufw allow 8555/tcp
 
-# Create user to run the masternode
+# Benutzer zur Ausführung der Masternode anlegen
 adduser defichain
 
-# Restart SSH
+# SSH neustarten
 systemctl restart ssh
 
-# Enable firewall
+# Firewall aktivieren
 ufw enable
 
-# switch to normal user 
+# zu normalem Benutzer wechseln 
 su defichain
 
-#load snapshot
+#Snapshot laden
 mkdir snapshot
 cd snapshot 
 wget https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
-unzip snapshot......
+unzip snapshot……
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
 mv ./* ~/.defi/
 
@@ -81,44 +93,42 @@ cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 ```
 
 
-## Installation in detail
+## Installation ausführlich
 
-Here all installation steps are described individually. 
-Too much info? Then just go directly to the <a href="#installation script">installation script</a>.
+Hier werden alle Installationsschritte einzeln beschrieben. 
+Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a>.
 <br>
 
-### System update and package installation
+### Systemupdate und Paketinstallation
 
-### Configure SSH
+### SSH konfigurieren
 
-### Configure firewall
+### Firewall konfigurieren
 
-### User installation
+### Benutzeranlage
 
-### Installing the masternode
+### Masternode installieren
 
 
 
-The following topics are covered and will also be covered later on via the installation script
+Folgende Themen werden behandelt und später auch über das Installationsskript abgedeckt
 
-* Ufw as an easy-to-administer firewall
+* Ufw als einfach zu administrierende Firewall
 * Fail2ban - 
-* No ssh access for root
-* No sudo
-* Moving SSH to another port.
+* Kein ssh-Zugang für root
+* Kein sudo
+* SSH auf einen anderen Port verschieben.
 
 
 
 
-## Installation script
+## Installationsskript
 
 
 ## Support
 
 DFI: dYVqg7U4Ubio8uLjsCBQzZseLXFJivr2h1
 
-## Licence 
+## Lizenz 
 
  GNU GPLv3 
-
-Translated with www.DeepL.com/Translator (free version)
