@@ -11,9 +11,11 @@
 </div>
 
 <h4 align="center">
-    Anleitung & Skript zur sicheren Installation einer DefiChain Masternode.
-    Wünsche und Verbesserungsvorschläge sind willkommen.
+    Anleitung & Skript zur sicheren Installation einer DefiChain Masternode.<br>
 </h4>
+<p align="center">
+    Wünsche und Verbesserungsvorschläge sind willkommen.
+</p>
 
 <p align="center">
   <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
@@ -21,7 +23,7 @@
   <a href="#Installation ausführlich">Installation ausführlich</a> •
   <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
-  <a href="#license">License</a>
+  <a href="#license">Lizenz</a>
 </p>
 
 <div align="center">
@@ -39,27 +41,31 @@ Ihr seid im Begriff, einen Server offen ins Internet zu stellen und auch noch ei
 
 ## Betriebssystemempfehlung
 
-Debian buster
+<p>Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.html">Debian-Betriebssystem in der Minimalversion</a>. Debian ist auf Stabilität und Sicherheit ausgerichtet. Es hat natürlich nicht alle Pakete in der neuesten Version an Bord, das hat aber auch einen guten Grund. Diese werden erst in das Release übernommen, wenn sie als stabil und sicher genug erachtet wurden.</p>
+<p>Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.</p>
 
 ## Installation kompakt
 
 Kurz und knapp alles zur manuellen Installation
 
 ```bash
-# Wechseln zu root, wenn ihr nicht schon root seid
+# Wechseln zu root
 su -
 # Installation der benötigten Packages
 apt -y update && apt -y upgrade
 apt -y install ufw nano htop fail2ban psmisc
 
-# Wir würfeln uns einen neuen SSH-Port
+# SSH-Port würfeln
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
 
 # SSH-Port ändern
+sed -i 's/#?Port 22.*/Port $SSH_PORT/' /etc/ssh/sshd_config
+sed -i 's/#Port 22/${SSH_PORT}/g' /etc/ssh/sshd_config
+
 nano -w /etc/ssh/sshd_config
 
 # Benötigte Ports in der Firewall freigeben
-ufw allow 50695/tcp
+ufw allow $SSH_PORT/tcp
 ufw allow 8555/tcp
 
 # Benutzer zur Ausführung der Masternode anlegen
