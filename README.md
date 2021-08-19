@@ -32,8 +32,6 @@
     
 </div>
 
-<br>
-
 ## Schützt eure Masternode!
 
 Die meisten Installationsanleitungen für Masternodes erwähnen das Thema Sicherheit nur am Rande.
@@ -41,35 +39,33 @@ Ihr seid im Begriff, einen Server offen ins Internet zu stellen und auch noch ei
 
 ## Betriebssystemempfehlung
 
-<p>Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.html">Debian-Betriebssystem in der Minimalversion</a>. Debian ist auf Stabilität und Sicherheit ausgerichtet. Es hat natürlich nicht alle Pakete in der neuesten Version an Bord, das hat aber auch einen guten Grund. Diese werden erst in das Release übernommen, wenn sie als stabil und sicher genug erachtet wurden.</p>
-<p>Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.</p>
+Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.html">Debian-Betriebssystem in der Minimalversion</a>. Debian ist auf Stabilität und Sicherheit ausgerichtet. Es hat natürlich nicht alle Pakete in der neuesten Version an Bord, das hat aber auch einen guten Grund. Neue Pakete und Versionen werden erst in das Release übernommen, wenn sie als stabil und sicher genug erachtet wurden.
+
+Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.
 
 ## Installation kompakt
 
 Kurz und knapp alles zur manuellen Installation
 
 ```bash
-# Wechseln zu root
+# Wechseln zu root & Installation der benötigten Packages
 su -
-# Installation der benötigten Packages
 apt -y update && apt -y upgrade
 apt -y install ufw nano htop fail2ban psmisc
 
-# SSH-Port würfeln
+# SSH-Port würfeln und in der Konfigurationsdatei ändern
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
+sed -i '/^#Port/s/#Port/Port/' /etc/ssh/sshd_config
+sed -i "/^Port/s/50695/${SSH_PORT}/g" /etc/ssh/sshd_config
+sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
+echo "ACHTUNG: beim nächsten LOGIN per SSH den Port $SSH_PORT nutzen. Bsp.: ssh defichain@yourIP -p $SSH_PORT."
 
-# SSH-Port ändern
-sed -i 's/#?Port 22.*/Port $SSH_PORT/' /etc/ssh/sshd_config
-sed -i 's/#Port 22/${SSH_PORT}/g' /etc/ssh/sshd_config
-
-nano -w /etc/ssh/sshd_config
+# Benutzer zur Ausführung der Masternode anlegen
+adduser defichain
 
 # Benötigte Ports in der Firewall freigeben
 ufw allow $SSH_PORT/tcp
 ufw allow 8555/tcp
-
-# Benutzer zur Ausführung der Masternode anlegen
-adduser defichain
 
 # SSH neustarten
 systemctl restart ssh
@@ -81,9 +77,9 @@ ufw enable
 su defichain
 
 #Snapshot laden
-mkdir snapshot
+mkdir ~/snapshot
 cd snapshot 
-wget https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
+wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
 unzip snapshot……
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
 mv ./* ~/.defi/
@@ -95,27 +91,83 @@ mkdir /home/defichain/.defi
 cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 ~/.defi/defid -daemon
 ~/.defi/defi-cli getblockcount 
-
 ```
-
 
 ## Installation ausführlich
 
 Hier werden alle Installationsschritte einzeln beschrieben. 
-Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a>.
+Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a> oder zurück zur
+<a href="#Installation kompakt">Kompaktanleitung</a> 
 <br>
 
 ### Systemupdate und Paketinstallation
 
+Zuerst wird das System aktualisiert und die notwendigen Pakete installiert. Wenn ihr nicht mehrere Administratoren auf dem System habt, schlagt euch `sudo` aus dem Kopf. Warum? .....
+Deshalb wird hier komplett auf den Einsatz von `sudo` verzichtet, ich rate im Normalfall von dessen Installation ab.
+
+Wir wechseln zu root und Installieren:
+
+```bash
+su -
+apt -y update && apt -y upgrade
+apt -y install ufw nano htop fail2ban psmisc
+```
+
+#### Installierte Pakete
+
+##### ufw
+
+Ufw ist eine einfach zu administrierende Firewall und für unsere Zwecke vollkommend ausreichend.
+
+##### nano
+
+Nano benötigen wir, um Dateien zu bearbeiten. Im Vergleich zu vi ist er für Einsteiger intuitiver zu bedienen.
+
+##### psmisc
+
+Enthält u.a. den Befehl killall, der in der offiziellen Doku verwendet wird.
+
+###### htop
+
+Ein kleines Tool zur schickeren Darstellung und Verwaltung der laufenden Prozesse als das Standardtool top.
+
+###### fail2ban
+
+Blockiert IP-Adressen nach mehreren fehlgeschlagenen Login-Versuchen.
+
 ### SSH konfigurieren
 
-### Firewall konfigurieren
+Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar noch keine "richtige" Sicherheitsmaßnahme, allerdings werden meist viele Server auf Standardports gescanned, um sie auf Sicherheitslecks zu untersuchen. Dies sind z.B. 443, 80, 81, etc.... Werft einfach mal einen Blick ins Firewall-Log, nachdem euer Server eine Weile läuft. [`cat /var/log/ufw.log`]
+
+```bash
+SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
+sed -i '/^#Port/s/#Port/Port/' /etc/ssh/sshd_config
+sed -i "/^Port/s/50695/${SSH_PORT}/g" /etc/ssh/sshd_config
+sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
+echo "ACHTUNG: beim nächsten LOGIN per SSH den Port $SSH_PORT nutzen. Bsp.: ssh defichain@yourIP -p $SSH_PORT"
+```
 
 ### Benutzeranlage
 
+Benutzer zur Ausführung der Masternode anlegen.
+
+```bash
+adduser defichain
+```
+
+### Firewall konfigurieren
+
+Nur die wirklich notwendigen Ports sollten in der Firewall freigegeben werden. Wir schalten den neuen SSH-Port frei und den Port für die Kommunikation der Masternode. Nachdem die Ports offen sind, starten wir den SSH-Dienst neu.
+
+```bash
+ufw allow $SSH_PORT/tcp
+ufw allow 8555/tcp
+systemctl restart ssh
+```
+Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten Terminal mit dem neuen Port und dem  
+User `defichain` an, da der Login für root jetzt verboten ist. [`ssh defichain@EureServerIP -p ]
+
 ### Masternode installieren
-
-
 
 Folgende Themen werden behandelt und später auch über das Installationsskript abgedeckt
 
@@ -125,11 +177,9 @@ Folgende Themen werden behandelt und später auch über das Installationsskript 
 * Kein sudo
 * SSH auf einen anderen Port verschieben.
 
-
-
-
 ## Installationsskript
 
+TBD
 
 ## Support
 
