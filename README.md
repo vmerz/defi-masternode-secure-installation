@@ -19,8 +19,8 @@
 
 <p align="center">
   <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
-  <a href="#Installation kompakt">Installation kompakt</a> •
-  <a href="#Installation ausführlich">Installation ausführlich</a> •
+  <a href="#installation-compact">Installation kompakt</a> •
+  <a href="#installation-detailed">Installation ausführlich</a> •
   <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
   <a href="#license">Lizenz</a>
@@ -43,12 +43,12 @@ Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.h
 
 Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.
 
-## Installation kompakt
+## Installation kompakt {#installation-compact}
 
 Kurz und knapp alles zur manuellen Installation
 
 ```bash
-# Wechseln zu root & Installation der benötigten Packages
+# Wechseln zu root & Installation der benötigten Pakete
 su -
 apt -y update && apt -y upgrade
 apt -y install ufw nano htop fail2ban psmisc
@@ -78,26 +78,25 @@ su defichain
 
 #Snapshot laden
 mkdir ~/snapshot
-cd snapshot 
 wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
-unzip snapshot……
+unzip ~/snapshot/*.zip
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
-mv ./* ~/.defi/
+mv ~/snapshot/* ~/.defi/
 
-wget https://github.com/DeFiCh/ain/releases/download/v1.8.1/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.1/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
 
-tar -xvzf defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
 mkdir /home/defichain/.defi
 cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 ~/.defi/defid -daemon
 ~/.defi/defi-cli getblockcount 
 ```
 
-## Installation ausführlich
+## Installation ausführlich {#installation-detailed}
 
 Hier werden alle Installationsschritte einzeln beschrieben. 
 Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a> oder zurück zur
-<a href="#Installation kompakt">Kompaktanleitung</a> 
+<a href="#installation-compact">Kompaktanleitung</a> 
 <br>
 
 ### Systemupdate und Paketinstallation
