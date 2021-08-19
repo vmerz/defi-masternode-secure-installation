@@ -19,8 +19,8 @@
 
 <p align="center">
   <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
-  <a href="#installation-compact">Installation kompakt</a> •
-  <a href="#installation-detailed">Installation ausführlich</a> •
+  <a href="#installation-kompact">Installation kompakt</a> •
+  <a href="#installation-ausführlich">Installation ausführlich</a> •
   <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
   <a href="#license">Lizenz</a>
@@ -43,7 +43,7 @@ Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.h
 
 Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.
 
-## Installation kompakt {#installation-compact}
+## Installation kompakt
 
 Kurz und knapp alles zur manuellen Installation
 
@@ -92,11 +92,11 @@ cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 ~/.defi/defi-cli getblockcount 
 ```
 
-## Installation ausführlich {#installation-detailed}
+## Installation ausführlich
 
 Hier werden alle Installationsschritte einzeln beschrieben. 
 Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a> oder zurück zur
-<a href="#installation-compact">Kompaktanleitung</a> 
+<a href="#installation-kompakt">Kompaktanleitung</a> 
 <br>
 
 ### Systemupdate und Paketinstallation
