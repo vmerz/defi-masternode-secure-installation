@@ -5,8 +5,8 @@
 </h1>
 
 <div align="center">
-    
-[:gb::us: Translation](https://github.com/vmerz/defi-masternode-secure-installation/README.EN.md) 
+
+[:gb::us: Translation](https://github.com/vmerz/defi-masternode-secure-installation/README.EN.md)
 
 </div>
 
@@ -27,9 +27,9 @@
 </p>
 
 <div align="center">
-    
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-    
+
 </div>
 
 ## Schützt eure Masternode!
@@ -51,7 +51,7 @@ Kurz und knapp manuell installieren
 # Wechseln zu root & Installation der benötigten Pakete
 su -
 apt -y update && apt -y upgrade
-apt -y install ufw nano htop fail2ban psmisc
+apt -y install ufw nano htop fail2ban psmisc unzip
 
 # SSH-Port würfeln und in der Konfigurationsdatei ändern
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
@@ -94,9 +94,9 @@ cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 
 ## Installation ausführlich
 
-Hier werden alle Installationsschritte einzeln beschrieben. 
+Hier werden alle Installationsschritte einzeln beschrieben.
 Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a> oder zurück zur
-<a href="#installation-kompakt">Kompaktanleitung</a> 
+<a href="#installation-kompakt">Kompaktanleitung</a>
 
 ### Systemupdate und Paketinstallation
 
@@ -108,14 +108,14 @@ Wir wechseln zu root und Installieren:
 ```bash
 su -
 apt -y update && apt -y upgrade
-apt -y install ufw nano htop fail2ban psmisc
+apt -y install ufw nano htop fail2ban psmisc unzip
 ```
 
 #### Installierte Pakete
 
 ##### ufw
 
-Ufw ist eine einfach zu administrierende Firewall und für unsere Zwecke vollkommend ausreichend.
+Ufw ist eine einfach zu administrierende Firewall.
 
 ##### nano
 
@@ -127,15 +127,16 @@ Enthält u.a. den Befehl killall, der in der offiziellen Doku verwendet wird.
 
 ###### htop
 
-Ein kleines Tool zur schickeren Darstellung und Verwaltung der laufenden Prozesse als das Standardtool top.
+Ein kleines Tool zur Darstellung und Verwaltung der laufenden Prozesse.
 
 ###### fail2ban
 
-Blockiert IP-Adressen nach mehreren fehlgeschlagenen Login-Versuchen.
+Blockiert IP-Adressen nach fehlgeschlagenen Login-Versuchen.
 
 ### SSH konfigurieren
 
-Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar noch keine "richtige" Sicherheitsmaßnahme, allerdings werden meist viele Server auf Standardports gescanned, um sie auf Sicherheitslecks zu untersuchen. Dies sind z.B. 443, 80, 81, etc.... Werft einfach mal einen Blick mit `cat /var/log/ufw.log` ins Firewall-Log, nachdem euer Server eine Weile läuft.
+Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar keine richtige Sicherheitsmaßnahme, allerdings werden Server meist nur auf Standardports gescanned, um sie auf Sicherheitslücken zu untersuchen (Ports 443, 80, 81, usw...). Werft einfach mal einen Blick mit `cat /var/log/ufw.log` ins Firewall-Log, nachdem euer Server eine Weile läuft. 
+Außerdem wird der Zugang für `root` per SSH verboten.
 
 ```bash
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
@@ -155,14 +156,15 @@ adduser defichain
 
 ### Firewall konfigurieren
 
-Nur die wirklich notwendigen Ports sollten in der Firewall freigegeben werden. Wir schalten den neuen SSH-Port frei und den Port für die Kommunikation der Masternode. Nachdem die Ports offen sind, starten wir den SSH-Dienst neu.
+Nur die notwendigen Ports werden in der Firewall freigegeben. Wir schalten den neuen SSH-Port und den Port für die Kommunikation der Masternode frei. Nachdem die Ports offen sind, starten wir den SSH-Dienst neu.
 
 ```bash
 ufw allow $SSH_PORT/tcp
 ufw allow 8555/tcp
 systemctl restart ssh
 ```
-Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten Terminal mit dem neuen Port und dem User `defichain` an, da der Login für root jetzt verboten ist `ssh defichain@EureServerIP -p`.
+
+Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten Terminal mit dem neuen Port und dem User `defichain` an, da der Login für root jetzt verboten ist `ssh defichain@EureServerIP -p SSH_PORT`.
 
 ### Masternode installieren
 
@@ -173,10 +175,11 @@ Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten 
 :soon:
 
 ## Support
+
 :coffee: oder :beer: für den Schreiberling ;)
 
 DFI: dYVqg7U4Ubio8uLjsCBQzZseLXFJivr2h1
 
-## Lizenz 
+## Lizenz
 
- GNU GPLv3 
+GNU GPLv3
