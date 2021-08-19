@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
-  <a href="#installation-kompact">Installation kompakt</a> •
+  <a href="#installation-kompakt">Installation kompakt</a> •
   <a href="#installation-ausführlich">Installation ausführlich</a> •
   <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
@@ -45,7 +45,7 @@ Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer ein
 
 ## Installation kompakt
 
-Kurz und knapp alles zur manuellen Installation
+Kurz und knapp manuell installieren
 
 ```bash
 # Wechseln zu root & Installation der benötigten Pakete
@@ -77,7 +77,7 @@ ufw enable
 su defichain
 
 #Snapshot laden
-mkdir ~/snapshot
+mkdir -p ~/snapshot
 wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
 unzip ~/snapshot/*.zip
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
@@ -97,7 +97,6 @@ cp ./defichain-1.8.1/bin/* /home/defichain/.defi
 Hier werden alle Installationsschritte einzeln beschrieben. 
 Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installationsskript</a> oder zurück zur
 <a href="#installation-kompakt">Kompaktanleitung</a> 
-<br>
 
 ### Systemupdate und Paketinstallation
 
@@ -136,7 +135,7 @@ Blockiert IP-Adressen nach mehreren fehlgeschlagenen Login-Versuchen.
 
 ### SSH konfigurieren
 
-Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar noch keine "richtige" Sicherheitsmaßnahme, allerdings werden meist viele Server auf Standardports gescanned, um sie auf Sicherheitslecks zu untersuchen. Dies sind z.B. 443, 80, 81, etc.... Werft einfach mal einen Blick ins Firewall-Log, nachdem euer Server eine Weile läuft. [`cat /var/log/ufw.log`]
+Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar noch keine "richtige" Sicherheitsmaßnahme, allerdings werden meist viele Server auf Standardports gescanned, um sie auf Sicherheitslecks zu untersuchen. Dies sind z.B. 443, 80, 81, etc.... Werft einfach mal einen Blick mit `cat /var/log/ufw.log` ins Firewall-Log, nachdem euer Server eine Weile läuft.
 
 ```bash
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
@@ -163,24 +162,18 @@ ufw allow $SSH_PORT/tcp
 ufw allow 8555/tcp
 systemctl restart ssh
 ```
-Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten Terminal mit dem neuen Port und dem  
-User `defichain` an, da der Login für root jetzt verboten ist. [`ssh defichain@EureServerIP -p ]
+Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten Terminal mit dem neuen Port und dem User `defichain` an, da der Login für root jetzt verboten ist `ssh defichain@EureServerIP -p`.
 
 ### Masternode installieren
 
-Folgende Themen werden behandelt und später auch über das Installationsskript abgedeckt
-
-* Ufw als einfach zu administrierende Firewall
-* Fail2ban - 
-* Kein ssh-Zugang für root
-* Kein sudo
-* SSH auf einen anderen Port verschieben.
+:soon:
 
 ## Installationsskript
 
-TBD
+:soon:
 
 ## Support
+:coffee: oder :beer: für den Schreiberling ;)
 
 DFI: dYVqg7U4Ubio8uLjsCBQzZseLXFJivr2h1
 
