@@ -1,4 +1,4 @@
-<h1 align="centre">
+<h1 align="center">
     <br>
         defi-masternode-secure-installation
     <br>
@@ -10,14 +10,14 @@
 
 </div>
 
-<h4 align="centre">
+<h4 align="center">
     Instructions & script for the safe installation of a DefiChain master node.<br>
 </h4>
 <p align="center">
     Wishes and suggestions for improvement are welcome.
 </p>
 
-<p align="centre">
+<p align="center">
   <a href="#OperatingSystemRecommendation">Operating System Recommendation</a> •
   <a href="#Installation-compact">Installation compact</a> •
   <a href="#Installation-in-detail">Installation in detail</a> •
