@@ -51,17 +51,19 @@ Kurz und knapp manuell installieren
 # Wechseln zu root & Installation der benötigten Pakete
 su -
 apt -y update && apt -y upgrade
-apt -y install ufw nano htop fail2ban psmisc unzip
+apt -y install ufw nano htop fail2ban psmisc unzip wget
 
 # SSH-Port würfeln und in der Konfigurationsdatei ändern
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
 sed -i '/^#Port/s/#Port/Port/' /etc/ssh/sshd_config
-sed -i "/^Port/s/50695/${SSH_PORT}/g" /etc/ssh/sshd_config
+sed -i "/^Port/s/22/${SSH_PORT}/g" /etc/ssh/sshd_config
 sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
 echo "ACHTUNG: beim nächsten LOGIN per SSH den Port $SSH_PORT nutzen. Bsp.: ssh defichain@yourIP -p $SSH_PORT."
+# NOTIERT EUCH DEN NEUEN SSH-PORT!
 
 # Benutzer zur Ausführung der Masternode anlegen
 adduser defichain
+# Passwörter und Daten zu User eingeben
 
 # Benötigte Ports in der Firewall freigeben
 ufw allow $SSH_PORT/tcp
@@ -76,21 +78,29 @@ ufw enable
 # zu normalem Benutzer wechseln 
 su defichain
 
-#Snapshot laden
+#Masternode installieren
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+mkdir ~/.defi
+cp ~/defichain-1.8.2/bin/* ~/.defi
+
+# Snapshot herunterladen, damit die Node schneller synchronisiert
 mkdir -p ~/snapshot
 wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
-unzip ~/snapshot/*.zip
+unzip ~/snapshot/*.zip -d ~/snapshot/
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
 mv ~/snapshot/* ~/.defi/
 
-wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.1/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
-
-tar -xvzf ~/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
-mkdir /home/defichain/.defi
-cp ./defichain-1.8.1/bin/* /home/defichain/.defi
+# Masternode-Daemon starten
 ~/.defi/defid -daemon
+# Aktuellen Blockcount abfragen
 ~/.defi/defi-cli getblockcount 
 ```
+
+Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
+<br>ODER im Wiki mit <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended_de#Automatischen_Start_konfigurieren">Automatischen Start konfigurieren</a>
+
+Ihr wollt wissen, was ihr gerade getan habt? Dann lest einfach weiter.
 
 ## Installation ausführlich
 
@@ -100,15 +110,15 @@ Zu viel Infos? Dann einfach direkt zum <a href="#Installationsskript">Installati
 
 ### Systemupdate und Paketinstallation
 
-Zuerst wird das System aktualisiert und die notwendigen Pakete installiert. Wenn ihr nicht mehrere Administratoren auf dem System habt, schlagt euch `sudo` aus dem Kopf. Warum? .....
-Deshalb wird hier komplett auf den Einsatz von `sudo` verzichtet, ich rate im Normalfall von dessen Installation ab.
+Zuerst wird das System aktualisiert und die notwendigen Pakete installiert. Wenn ihr nicht mehrere Administratoren auf dem System habt, schlagt euch `sudo` aus dem Kopf.
+Hier wird komplett auf `sudo` verzichtet, ich möchte hier aber auch keine `sudo`-Debatte starten.
 
 Wir wechseln zu root und Installieren:
 
 ```bash
 su -
 apt -y update && apt -y upgrade
-apt -y install ufw nano htop fail2ban psmisc unzip
+apt -y install ufw nano htop fail2ban psmisc unzip wget
 ```
 
 #### Installierte Pakete
@@ -133,6 +143,10 @@ Ein kleines Tool zur Darstellung und Verwaltung der laufenden Prozesse.
 
 Blockiert IP-Adressen nach fehlgeschlagenen Login-Versuchen.
 
+###### wget
+
+Ermöglicht den Download von Dateien via HTTP/HTTPS & FTP.
+
 ### SSH konfigurieren
 
 Wir generieren uns einen neuen Port für den SSH-Zugang. Das ist zwar keine richtige Sicherheitsmaßnahme, allerdings werden Server meist nur auf Standardports gescanned, um sie auf Sicherheitslücken zu untersuchen (Ports 443, 80, 81, usw...). Werft einfach mal einen Blick mit `cat /var/log/ufw.log` ins Firewall-Log, nachdem euer Server eine Weile läuft. 
@@ -141,10 +155,13 @@ Außerdem wird der Zugang für `root` per SSH verboten.
 ```bash
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
 sed -i '/^#Port/s/#Port/Port/' /etc/ssh/sshd_config
-sed -i "/^Port/s/50695/${SSH_PORT}/g" /etc/ssh/sshd_config
+sed -i "/^Port/s/22/${SSH_PORT}/g" /etc/ssh/sshd_config
 sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
 echo "ACHTUNG: beim nächsten LOGIN per SSH den Port $SSH_PORT nutzen. Bsp.: ssh defichain@yourIP -p $SSH_PORT"
 ```
+
+**Notiert euch den neuen SSH-Port!**
+Ansonsten habt ihr euch nach dem Logout selbst vom System ausgeschlossen.
 
 ### Benutzeranlage
 
@@ -156,7 +173,7 @@ adduser defichain
 
 ### Firewall konfigurieren
 
-Nur die notwendigen Ports werden in der Firewall freigegeben. Wir schalten den neuen SSH-Port und den Port für die Kommunikation der Masternode frei. Nachdem die Ports offen sind, starten wir den SSH-Dienst neu.
+Nur die notwendigen Ports werden in der Firewall freigegeben. Wir schalten den neuen SSH-Port und den Port für die Kommunikation der Masternode frei. Nachdem die Ports offen sind, wird der SSH-Dienst neu gestartet.
 
 ```bash
 ufw allow $SSH_PORT/tcp
@@ -168,7 +185,35 @@ Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten 
 
 ### Masternode installieren
 
-:soon:
+Aktuelle Maternode herunterladen, entpacken und in das richtige Verzeichnis verschieben.
+
+```bash
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+mkdir ~/.defi
+cp ~/defichain-1.8.2/bin/* ~/.defi
+```
+
+Bevor die Node gestartet wird, wird der Snapshot heruntergeladen, damit die Node schneller synchronisiert.
+
+```bash
+mkdir -p ~/snapshot
+wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
+unzip ~/snapshot/*.zip -d ~/snapshot/
+rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
+mv ~/snapshot/* ~/.defi/
+```
+
+Den Masternode Dienst starten
+
+```bash
+# Masternode-Daemon starten
+~/.defi/defid -daemon
+# Aktuellen Blockcount abfragen
+~/.defi/defi-cli getblockcount
+```
+Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
+<br>ODER im Wiki mit <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended_de#Automatischen_Start_konfigurieren">Automatischen Start konfigurieren</a>
 
 ## Installationsskript
 
