@@ -11,54 +11,63 @@
 </div>
 
 <h4 align="centre">
-    Instructions & script for the secure installation of a DefiChain masternode.
-    Wishes and suggestions for improvement are welcome.
+    Instructions & script for the safe installation of a DefiChain master node.<br>
 </h4>
+<p align="center">
+    Wishes and suggestions for improvement are welcome.
+</p>
 
 <p align="centre">
   <a href="#OperatingSystemRecommendation">Operating System Recommendation</a> •
-  <a href="#Installation compact">Installation compact</a> •
-  <a href="#Installation detailed">Installation detailed</a> •
-  <a href="#Installation script">Installation script</a> •
+  <a href="#Installation-compact">Installation compact</a> •
+  <a href="#Installation-in-detail">Installation in detail</a> •
+  <a href="#Installation-script">Installation script</a> •
   <a href="#Support">Support</a> •
   <a href="#License">License</a>
 </p>
 
-<br>
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)    
+<div align="center">
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+</div>
 
 ## Protect your masternode!
 
-Most installation guides for masternodes only mention the topic of security in passing.
-You are about to put a server openly on the internet and also transfer some coins to its wallet. So we should definitely deal with the topic of server security.
+Most installation instructions for master nodes only mention the topic of security in passing.
+You are about to put a server openly on the Internet and also transfer some coins to its wallet. So we should definitely deal with the topic of server security.
 
 ## Operating system recommendation
 
-Debian buster
+I recommend the current <a href="#https://www.debian.org/CD/netinst/index.de.html">Debian operating system in the minimal version</a>. Debian is focused on stability and security. It does not have all packages on board in the latest version, of course, but that has a good reason. New packages and versions are not included in the release until they are deemed stable and secure enough.
+
+Also, in my installations, a distribution upgrade with Debian has always worked flawlessly, with Ubuntu, for example, never completely error-free or not at all.
 
 ## Installation compact
 
 Short and sweet everything about the manual installation
 
-``bash
-# change to root if you are not already root
+```bash
+# Switch to root & install the required packages
 su -
-# install the required packages
 apt -y update && apt -y upgrade
-apt -y install ufw nano htop fail2ban psmisc
+apt -y install ufw nano htop fail2ban psmisc unzip wget
 
-# We dice ourselves a new SSH port
+# We dice ourselves a new SSH port and change the config
 SSH_PORT=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
+sed -i '/^#Port/s/#Port/Port/' /etc/ssh/sshd_config
+sed -i "/^Port/s/22/${SSH_PORT}/g" /etc/ssh/sshd_config
+sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
+echo "ATTENTION: use the port $SSH_PORT at the next LOGIN via SSH. Ex: ssh defichain@yourIP -p $SSH_PORT."
+# NOTE THE NEW SSH PORT!
 
-# Change SSH port
-nano -w /etc/ssh/sshd_config
+# create user to run the masternode
+adduser defichain
+# enter passwords and data for user
 
 # Allow required ports in the firewall
-ufw allow 50695/tcp
+ufw allow $SSH_PORT/tcp
 ufw allow 8555/tcp
-
-# Create user to run the masternode
-adduser defichain
 
 # Restart SSH
 systemctl restart ssh
@@ -69,58 +78,45 @@ ufw enable
 # switch to normal user 
 su defichain
 
-#load snapshot
-mkdir snapshot
-cd snapshot 
-wget https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
-unzip snapshot......
+# install the masternode
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+mkdir ~/.defi
+cp ~/defichain-1.8.2/bin/* ~/.defi
+
+# Download snapshot to make the node sync faster
+mkdir -p ~/snapshot
+wget -P ~/snapshot https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip
+unzip ~/snapshot/*.zip -d ~/snapshot/
 rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
-mv ./* ~/.defi/
+mv ~/snapshot/* ~/.defi/
 
-wget https://github.com/DeFiCh/ain/releases/download/v1.8.1/defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
-
-tar -xvzf defichain-1.8.1-x86_64-pc-linux-gnu.tar.gz
-mkdir /home/defichain/.defi
-cp ./defichain-1.8.1/bin/* /home/defichain/.defi
+# Start masternode daemon
 ~/.defi/defid -daemon
-~/.defi/defi-cli getblockcount 
-
+# Query current block count
+~/.defi/defi-cli getblockcount
 ```
 
+Done! Now we continue with the <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">official tutorial from Step 3</a>
+<br>Or in the wiki with <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended#Configure_automatic_start">Configure automatic start</a>.
+
+You want to know what you just did? Then just read on.
 
 ## Installation in detail
 
-Here all installation steps are described individually. 
-Too much info? Then just go directly to the <a href="#installation script">installation script</a>.
-<br>
+Here all installation steps are described individually.
+Too much info? Then just go directly to the <a href="#installation-script">installation script</a> or back to the
+<a href="#installation-compact">compact manual</a>
 
-### System update and package installation
-
-### Configure SSH
-
-### Configure firewall
-
-### User installation
-
-### Installing the masternode
-
-
-
-The following topics are covered and will also be covered later on via the installation script
-
-* Ufw as an easy-to-administer firewall
-* Fail2ban - 
-* No ssh access for root
-* No sudo
-* Moving SSH to another port.
-
-
-
+:soon:
 
 ## Installation script
 
+:soon:
 
 ## Support
+
+:coffee: or :beer: for the writer ;)
 
 DFI: dYVqg7U4Ubio8uLjsCBQzZseLXFJivr2h1
 

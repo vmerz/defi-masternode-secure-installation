@@ -78,7 +78,7 @@ ufw enable
 # zu normalem Benutzer wechseln 
 su defichain
 
-#Masternode installieren
+# Masternode installieren
 wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
 tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
 mkdir ~/.defi
