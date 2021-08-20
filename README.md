@@ -23,7 +23,7 @@
   <a href="#installation-ausführlich">Installation ausführlich</a> •
   <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
-  <a href="#license">Lizenz</a>
+  <a href="#Lizenz">Lizenz</a>
 </p>
 
 <div align="center">
