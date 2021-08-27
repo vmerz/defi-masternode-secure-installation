@@ -6,7 +6,7 @@
 
 <div align="center">
     
-[:de: Übersetzung](https://github.com/vmerz/defi-masternode-secure-installation/README.md) 
+[:de: Übersetzung](https://github.com/vmerz/defi-masternode-secure-installation/blob/main/README.md) 
 
 </div>
 

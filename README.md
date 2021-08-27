@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[:gb::us: Translation](https://github.com/vmerz/defi-masternode-secure-installation/README.EN.md)
+[:gb::us: Translation](https://github.com/vmerz/defi-masternode-secure-installation/blob/main/README.EN.md)
 
 </div>
 
