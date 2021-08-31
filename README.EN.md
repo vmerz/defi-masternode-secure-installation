@@ -92,9 +92,9 @@ rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
 mv ~/snapshot/* ~/.defi/
 
 # Start masternode daemon
-~/.defi/defid -daemon
+~/.defi/bin/defid -daemon
 # Query current block count
-~/.defi/defi-cli getblockcount
+~/.defi/bin/defi-cli getblockcount
 ```
 
 Done! Now we continue with the <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">official tutorial from Step 3</a>
