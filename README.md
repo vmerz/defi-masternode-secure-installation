@@ -79,10 +79,10 @@ ufw enable
 su defichain
 
 # Masternode installieren
-wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
-tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.4/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz -C ~/
 mkdir ~/.defi
-cp ~/defichain-1.8.2/bin/* ~/.defi
+cp ~/defichain-1.8.4/bin/* ~/.defi
 
 # Snapshot herunterladen, damit die Node schneller synchronisiert
 mkdir -p ~/snapshot
@@ -188,10 +188,10 @@ Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten 
 Aktuelle Maternode herunterladen, entpacken und in das richtige Verzeichnis verschieben.
 
 ```bash
-wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
-tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.4/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz -C ~/
 mkdir ~/.defi
-cp ~/defichain-1.8.2/bin/* ~/.defi
+cp ~/defichain-1.8.4/bin/* ~/.defi
 ```
 
 Bevor die Node gestartet wird, wird der Snapshot heruntergeladen, damit die Node schneller synchronisiert.
@@ -217,7 +217,14 @@ Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run
 
 ## Installationsskript
 
-:soon:
+Automatisches Installationsskript. Der schnellste Weg zur Masternode.
+
+```bash
+su -
+apt install wget && wget https://github.com/vmerz/defi-masternode-secure-installation/blob/main/installDefiMasternode.sh
+chmod +x installDefiMasternode.sh
+bash installDefiMasternode.sh
+```
 
 ## Support
 

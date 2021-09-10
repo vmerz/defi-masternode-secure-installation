@@ -35,9 +35,10 @@ WARNING=${WARNING:-"1"}
 SUCCESS=${SUCCESS:-"1"}
 
 #_DEFI constants_______________________________________________________________
-MASTERNODE_ARCHIVE="defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz"
-MASTERNODE_DOWNLOAD_URL="https://github.com/DeFiCh/ain/releases/download/v1.8.2/$MASTERNODE_ARCHIVE"
-MASTERNODE_RELEASE_FOLDER="defichain-1.8.2"
+
+MASTERNODE_ARCHIVE="defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz"
+MASTERNODE_DOWNLOAD_URL="https://github.com/DeFiCh/ain/releases/download/v1.8.4/$MASTERNODE_ARCHIVE"
+MASTERNODE_RELEASE_FOLDER="defichain-1.8.4"
 
 
 SNAPSHOT_DOWNLOAD_URL="https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip"
