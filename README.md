@@ -19,9 +19,9 @@
 
 <p align="center">
   <a href="#Betriebssystemempfehlung">Betriebssystemempfehlung</a> •
+  <a href="#Installationsskript">Installationsskript</a> •
   <a href="#installation-kompakt">Installation kompakt</a> •
   <a href="#installation-ausführlich">Installation ausführlich</a> •
-  <a href="#Installationsskript">Installationsskript</a> •
   <a href="#Support">Support</a> •
   <a href="#Lizenz">Lizenz</a>
 </p>
@@ -42,6 +42,22 @@ Ihr seid im Begriff, einen Server offen ins Internet zu stellen und auch noch ei
 Ich empfehle das aktuelle <a href="#https://www.debian.org/CD/netinst/index.de.html">Debian-Betriebssystem in der Minimalversion</a>. Debian ist auf Stabilität und Sicherheit ausgerichtet. Es hat natürlich nicht alle Pakete in der neuesten Version an Bord, das hat aber auch einen guten Grund. Neue Pakete und Versionen werden erst in das Release übernommen, wenn sie als stabil und sicher genug erachtet wurden.
 
 Auch hat bei meinen Installationen ein Distributionsupgrade mit Debian immer einwandfrei funktioniert, mit Ubuntu z.B. noch nie komplett fehlerfrei oder überhaupt nicht.
+
+## Installationsskript
+
+Automatisches Installationsskript. Masternode installieren ohne viel Leserei.
+
+```bash
+su -
+apt install wget && wget https://github.com/vmerz/defi-masternode-secure-installation/blob/main/installDefiMasternode.sh
+chmod +x installDefiMasternode.sh
+bash installDefiMasternode.sh
+```
+
+Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
+<br>ODER im Wiki mit <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended_de#Automatischen_Start_konfigurieren">Automatischen Start konfigurieren</a>
+
+Ihr wollt es genauer wissen? Dann einfach weiterlesen.
 
 ## Installation kompakt
 
@@ -79,10 +95,10 @@ ufw enable
 su defichain
 
 # Masternode installieren
-wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
-tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.4/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz -C ~/
 mkdir ~/.defi
-cp ~/defichain-1.8.2/bin/* ~/.defi
+cp ~/defichain-1.8.4/bin/* ~/.defi
 
 # Snapshot herunterladen, damit die Node schneller synchronisiert
 mkdir -p ~/snapshot
@@ -92,9 +108,9 @@ rm -Rf ~/.defi/chainstate ~/.defi/enhancedcs ~/.defi/blocks
 mv ~/snapshot/* ~/.defi/
 
 # Masternode-Daemon starten
-~/.defi/defid -daemon
+~/.defi/bin/defid -daemon
 # Aktuellen Blockcount abfragen
-~/.defi/defi-cli getblockcount 
+~/.defi/bin/defi-cli getblockcount 
 ```
 
 Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
@@ -188,10 +204,10 @@ Um die neue Konfiguration zu testen, meldet ihr euch am Besten in einem zweiten 
 Aktuelle Maternode herunterladen, entpacken und in das richtige Verzeichnis verschieben.
 
 ```bash
-wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.2/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz
-tar -xvzf ~/defichain-1.8.2-x86_64-pc-linux-gnu.tar.gz -C ~/
+wget -P ~/ https://github.com/DeFiCh/ain/releases/download/v1.8.4/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz
+tar -xvzf ~/defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz -C ~/
 mkdir ~/.defi
-cp ~/defichain-1.8.2/bin/* ~/.defi
+cp ~/defichain-1.8.4/bin/* ~/.defi
 ```
 
 Bevor die Node gestartet wird, wird der Snapshot heruntergeladen, damit die Node schneller synchronisiert.
@@ -214,10 +230,6 @@ Den Masternode Dienst starten
 ```
 Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
 <br>ODER im Wiki mit <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended_de#Automatischen_Start_konfigurieren">Automatischen Start konfigurieren</a>
-
-## Installationsskript
-
-:soon:
 
 ## Support
 
