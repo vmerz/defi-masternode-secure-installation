@@ -53,6 +53,10 @@ apt install wget && wget https://github.com/vmerz/defi-masternode-secure-install
 chmod +x installDefiMasternode.sh
 bash installDefiMasternode.sh
 ```
+- Benutzer angeben, der die Node ausführt (Standard: defichain)
+- Benutzerpasswort eingeben
+- Generierten SSH-Port aufschreiben
+- Wechseln zu neuem Benutzer mit su defichain
 
 Geschafft! Jetzt geht es weiter mit der <a href="https://defichain.com/learn/run-a-masternode/#step-3---setting-up-crontab-to-keep-our-node-running-in-the-background">offiziellen Anleitung ab Step 3</a>
 <br>ODER im Wiki mit <a href="https://defichain-wiki.com/wiki/Masternode_installation_extended_de#Automatischen_Start_konfigurieren">Automatischen Start konfigurieren</a>

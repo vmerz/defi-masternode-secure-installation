@@ -40,7 +40,6 @@ MASTERNODE_ARCHIVE="defichain-1.8.4-x86_64-pc-linux-gnu.tar.gz"
 MASTERNODE_DOWNLOAD_URL="https://github.com/DeFiCh/ain/releases/download/v1.8.4/$MASTERNODE_ARCHIVE"
 MASTERNODE_RELEASE_FOLDER="defichain-1.8.4"
 
-
 SNAPSHOT_DOWNLOAD_URL="https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/snapshot-mainnet-1052243.zip"
 
 #_functions____________________________________________________________________
@@ -196,9 +195,7 @@ systemctl restart ssh
 ufw enable
 
 # Start defi daemon
-"${MASTERNODE_TARGET_FOLDER:?}/"bin/defid -daemon
+COMMAND="${MASTERNODE_TARGET_FOLDER:?}/"bin/defid
+runuser -u $USERNAME -- $COMMAND -daemon
 
-
-
-
-
+__msg_info "Daemon started, please switch to user $USERNAME"
