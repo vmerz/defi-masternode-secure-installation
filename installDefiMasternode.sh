@@ -179,7 +179,7 @@ DEBIAN_FRONTEND=noninteractive apt-get upgrade -qq < /dev/null > /dev/null
 DEBIAN_FRONTEND=noninteractive apt-get install -qq ufw nano htop fail2ban psmisc unzip wget < /dev/null > /dev/null
 
 askInstallDefiMasternode
-#downloadDefiSnapshot
+downloadDefiSnapshot
 
 changesshPort
 

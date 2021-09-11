@@ -49,7 +49,7 @@ Automatisches Installationsskript. Masternode installieren ohne viel Leserei.
 
 ```bash
 su -
-apt install wget && wget https://github.com/vmerz/defi-masternode-secure-installation/blob/main/installDefiMasternode.sh
+apt install wget && wget https://github.com/vmerz/defi-masternode-secure-installation/raw/main/installDefiMasternode.sh
 chmod +x installDefiMasternode.sh
 bash installDefiMasternode.sh
 ```
